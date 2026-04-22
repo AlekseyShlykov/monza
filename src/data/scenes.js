@@ -118,6 +118,10 @@ export const SCROLL_HAPTIC_MILESTONES = scenes
  */
 export const POST_LAP_COOLDOWN_MAX = 0.8;
 
+/** Десктоп: при postT ≥ enter — полноэкранный podium; при откате < exit — выход (гистерезис). */
+export const POST_LAP_PODIUM_FULLSCREEN_ENTER = 0.93;
+export const POST_LAP_PODIUM_FULLSCREEN_EXIT = 0.87;
+
 /** Post-finish scroll: first cooldown, then podium (one at a time). Paths under /public. */
 export const postLapPhotos = [
   'assets/placeholders/cooldown.png',

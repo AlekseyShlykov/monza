@@ -56,6 +56,4 @@ export const PostLapGallery = memo(
       </div>
     );
   },
-  (prev, next) =>
-    (prev.postT < POST_LAP_COOLDOWN_MAX) === (next.postT < POST_LAP_COOLDOWN_MAX),
 );

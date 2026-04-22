@@ -4,9 +4,14 @@ import { safeVibrate } from '../lib/vibrate.js';
 /**
  * First deliberate scroll gesture → race started (green lights).
  */
+const TOP_EPS = 2;
+/** Считаем, что ушли от верха — после этого возврат в самый верх снова гасит старт */
+const AWAY_FROM_TOP = 48;
+
 export function useRaceStart() {
   const [raceStarted, setRaceStarted] = useState(false);
   const fired = useRef(false);
+  const hadScrolledAwayFromTop = useRef(false);
 
   const arm = useCallback(() => {
     if (fired.current) return;
@@ -14,6 +19,31 @@ export function useRaceStart() {
     setRaceStarted(true);
     safeVibrate(8);
   }, []);
+
+  useEffect(() => {
+    if (!raceStarted) {
+      hadScrolledAwayFromTop.current = false;
+      return undefined;
+    }
+
+    const scrollTop = () => window.scrollY || document.documentElement.scrollTop;
+
+    const onScroll = () => {
+      const y = scrollTop();
+      if (y > AWAY_FROM_TOP) {
+        hadScrolledAwayFromTop.current = true;
+      }
+      if (y <= TOP_EPS && hadScrolledAwayFromTop.current) {
+        hadScrolledAwayFromTop.current = false;
+        fired.current = false;
+        setRaceStarted(false);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [raceStarted]);
 
   useEffect(() => {
     if (raceStarted) return undefined;

@@ -6,13 +6,43 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react';
+import { createPortal } from 'react-dom';
 import monzaPathSvg from '../../monzapath.svg?raw';
-import { LAP_PROGRESS_END, scenes, sceneOpacity } from '../data/scenes.js';
+import {
+  LAP_PROGRESS_END,
+  POST_LAP_PODIUM_FULLSCREEN_ENTER,
+  POST_LAP_PODIUM_FULLSCREEN_EXIT,
+  postLapPhotos,
+  scenes,
+  sceneOpacity,
+} from '../data/scenes.js';
 import { useStoryEngine } from '../hooks/useStoryEngine.js';
 import { PostLapGallery } from './PostLapGallery.jsx';
 import { StartLights } from './StartLights.jsx';
 import { StoryCaption } from './StoryCaption.jsx';
+
+const DESKTOP_MQ = '(min-width: 641px)';
+
+function subscribeDesktop(cb) {
+  const mq = window.matchMedia(DESKTOP_MQ);
+  mq.addEventListener('change', cb);
+  return () => mq.removeEventListener('change', cb);
+}
+
+function getDesktopSnapshot() {
+  return typeof window !== 'undefined' && window.matchMedia(DESKTOP_MQ).matches;
+}
+
+function getDesktopServerSnapshot() {
+  return false;
+}
+
+function podiumAssetUrl(path) {
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  return `${import.meta.env.BASE_URL}${p}`;
+}
 
 const VIEW_W = 1681;
 const VIEW_H = 998;
@@ -43,6 +73,8 @@ function buildTrailPoints(buffer, x, y) {
 }
 
 function StickyStageComponent({ raceStarted }) {
+  const desktop = useSyncExternalStore(subscribeDesktop, getDesktopSnapshot, getDesktopServerSnapshot);
+
   const regionRef = useRef(null);
   const pathRef = useRef(null);
   const dotRef = useRef(null);
@@ -52,6 +84,7 @@ function StickyStageComponent({ raceStarted }) {
   const lenRef = useRef(0);
   const trailClearedForLapEnd = useRef(false);
   const [uiProgress, setUiProgress] = useState(0);
+  const [podiumFullscreen, setPodiumFullscreen] = useState(false);
   const frameCount = useRef(0);
 
   const postT =
@@ -125,6 +158,18 @@ function StickyStageComponent({ raceStarted }) {
 
   useStoryEngine({ regionRef, onFrame, lapEnd: LAP_PROGRESS_END });
 
+  useEffect(() => {
+    if (!desktop) {
+      setPodiumFullscreen(false);
+      return;
+    }
+    if (postT >= POST_LAP_PODIUM_FULLSCREEN_ENTER) {
+      setPodiumFullscreen(true);
+    } else if (postT < POST_LAP_PODIUM_FULLSCREEN_EXIT) {
+      setPodiumFullscreen(false);
+    }
+  }, [desktop, postT]);
+
   const dominant = useMemo(() => {
     const weighted = scenes.map((s) => ({ scene: s, w: sceneOpacity(s, lapStoryT) }));
     const best = weighted.reduce((a, b) => (b.w > a.w ? b : a), weighted[0]);
@@ -135,9 +180,27 @@ function StickyStageComponent({ raceStarted }) {
     return { scene: nearest, w: 0.28 };
   }, [lapStoryT]);
 
-  const rowTrackFr = 1 - postT * 0.48;
-  const rowBottomFr = 2 + postT * 1.42;
+  /* На десктопе чуть меньше доля ряда с трассой — больше высоты под подпись и картинки */
+  const rowTrackFr = (1 - postT * 0.48) * (desktop ? 0.9 : 1);
+  const rowBottomFr = (desktop ? 2.22 : 2) + postT * 1.42;
   const mapLift = `translate3d(0, calc(-1 * ${postT} * min(5.5vh, 3.5rem)), 0)`;
+
+  const [, podiumPhotoPath] = postLapPhotos;
+  const podiumFullscreenLayer =
+    typeof document !== 'undefined' &&
+    desktop &&
+    podiumFullscreen &&
+    createPortal(
+      <div className="podium-fullscreen" role="img" aria-label="Podium">
+        <img
+          className="podium-fullscreen__img"
+          src={podiumAssetUrl(podiumPhotoPath)}
+          alt=""
+          decoding="async"
+        />
+      </div>,
+      document.body,
+    );
 
   return (
     <section ref={regionRef} className="story-region" aria-label="Monza lap scroll story">
@@ -152,6 +215,7 @@ function StickyStageComponent({ raceStarted }) {
           <div className="stage__glow" aria-hidden />
           <div className="stage__frame">
             <div className="stage__media">
+              <p className="stage__brand">MONZA</p>
               <img
                 className="stage__map"
                 src={`${import.meta.env.BASE_URL}monza.svg`}
@@ -186,6 +250,7 @@ function StickyStageComponent({ raceStarted }) {
           <PostLapGallery postT={postT} />
         </div>
       </div>
+      {podiumFullscreenLayer}
     </section>
   );
 }
