@@ -1,0 +1,23 @@
+{
+  "name": "monza-scroll",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "predev": "node -e \"require('fs').copyFileSync('monza.svg','public/monza.svg')\"",
+    "dev": "vite",
+    "prebuild": "node -e \"require('fs').copyFileSync('monza.svg','public/monza.svg')\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy:gh": "vite build && npx --yes gh-pages -d dist",
+    "gen:lap-path": "python3 scripts/gen-lap-path.py"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.14"
+  }
+}
