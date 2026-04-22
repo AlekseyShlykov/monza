@@ -18,11 +18,16 @@ export const PostLapGallery = memo(
       return { cooldownOpacity: 0, podiumOpacity: 1 };
     }, [postT]);
 
+    const podiumPhase = postT >= POST_LAP_COOLDOWN_MAX;
+
     return (
-      <div className="post-lap-gallery" aria-label="После финиша">
+      <div
+        className={`post-lap-gallery${podiumPhase ? ' post-lap-gallery--podium' : ''}`}
+        aria-label="После финиша"
+      >
         <div className="post-lap-gallery__slot">
           <div
-            className="post-lap-gallery__slide"
+            className="post-lap-gallery__slide post-lap-gallery__slide--cooldown"
             aria-hidden={cooldownOpacity < 0.01}
             style={{ opacity: cooldownOpacity }}
           >
@@ -31,11 +36,11 @@ export const PostLapGallery = memo(
               alt=""
               loading="lazy"
               decoding="async"
-              className="post-lap-gallery__img"
+              className="post-lap-gallery__img post-lap-gallery__img--cooldown"
             />
           </div>
           <div
-            className="post-lap-gallery__slide"
+            className="post-lap-gallery__slide post-lap-gallery__slide--podium"
             aria-hidden={podiumOpacity < 0.01}
             style={{ opacity: podiumOpacity }}
           >
@@ -44,7 +49,7 @@ export const PostLapGallery = memo(
               alt=""
               loading="lazy"
               decoding="async"
-              className="post-lap-gallery__img"
+              className="post-lap-gallery__img post-lap-gallery__img--podium"
             />
           </div>
         </div>
