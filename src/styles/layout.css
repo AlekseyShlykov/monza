@@ -479,16 +479,9 @@
     object-position: center;
   }
 
-  /* Lesmo 2: только сдвиг кадра на 400px вверх (cover + расширенная высота, без scale) */
+  /* Lesmo 2: только сдвиг на 400px вверх (тот же cover, без смены размера слота) */
   .story-caption[data-scene='lesmo-2'] .story-caption__img {
-    inset: auto;
-    left: 0;
-    right: 0;
-    top: -400px;
-    width: 100%;
-    height: calc(100% + 800px);
-    object-fit: cover;
-    object-position: center;
+    transform: translateY(-400px);
   }
 
   /* Больше высоты галереи — podium растёт вместе со скроллом, без скачка на весь экран */
