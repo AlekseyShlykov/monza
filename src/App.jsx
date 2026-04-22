@@ -16,7 +16,7 @@ export default function App() {
 
       <footer className="site-footer">
         <p>Autodromo Nazionale Monza — interactive scroll study</p>
-        <p className="site-footer__credit">Made by Alex Shlykov</p>
+        <p className="site-footer__credit">Created by Alex Shlykov for Evgeniy Safronov</p>
       </footer>
     </div>
   );

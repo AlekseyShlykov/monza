@@ -118,9 +118,6 @@ export const SCROLL_HAPTIC_MILESTONES = scenes
  */
 export const POST_LAP_COOLDOWN_MAX = 0.8;
 
-/** Подпись под кадром podium в галерее */
-export const PODIUM_GALLERY_FOOTNOTE = 'Created by Alex Shlykov for Evgeniy Safronov';
-
 /** Post-finish scroll: first cooldown, then podium (one at a time). Paths under /public. */
 export const postLapPhotos = [
   'assets/placeholders/cooldown.png',

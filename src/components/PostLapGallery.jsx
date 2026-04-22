@@ -1,9 +1,5 @@
 import { memo, useMemo } from 'react';
-import {
-  PODIUM_GALLERY_FOOTNOTE,
-  POST_LAP_COOLDOWN_MAX,
-  postLapPhotos,
-} from '../data/scenes.js';
+import { POST_LAP_COOLDOWN_MAX, postLapPhotos } from '../data/scenes.js';
 
 function assetUrl(path) {
   const p = path.startsWith('/') ? path.slice(1) : path;
@@ -57,9 +53,6 @@ export const PostLapGallery = memo(
             />
           </div>
         </div>
-        {podiumPhase ? (
-          <p className="post-lap-gallery__podium-note">{PODIUM_GALLERY_FOOTNOTE}</p>
-        ) : null}
       </div>
     );
   },

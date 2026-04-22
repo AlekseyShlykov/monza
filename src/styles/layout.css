@@ -374,17 +374,6 @@
   object-position: center;
 }
 
-.post-lap-gallery__podium-note {
-  flex: 0 0 auto;
-  margin: 0;
-  padding: 0.3rem 0.4rem 0.1rem;
-  font-size: clamp(0.65rem, 2.8vw, 0.78rem);
-  line-height: 1.35;
-  color: rgba(232, 234, 239, 0.5);
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-
 .story-caption {
   min-height: 0;
   display: flex;
@@ -495,7 +484,7 @@
     inset: auto;
     left: 0;
     right: 0;
-    top: -700px;
+    top: -1300px;
     width: 100%;
     height: calc(100% + 1400px);
     object-fit: cover;
@@ -507,7 +496,7 @@
     inset: auto;
     left: 0;
     right: 0;
-    top: -100px;
+    top: -300px;
     width: 100%;
     height: calc(100% + 200px);
     object-fit: cover;
@@ -519,7 +508,7 @@
     inset: auto;
     left: 0;
     right: 0;
-    top: -1200px;
+    top: -500px;
     width: 100%;
     height: calc(100% + 2400px);
     object-fit: cover;
