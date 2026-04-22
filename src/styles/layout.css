@@ -467,7 +467,7 @@
 }
 
 @media (min-width: 641px) {
-  /* START / grid: видимая область сдвинута на 200px вверх по исходнику */
+  /* START / grid: сдвиг кадра вверх (остальные сцены — базовый .story-caption__img) */
   .story-caption[data-scene='intro'] .story-caption__img {
     inset: auto;
     left: 0;
@@ -475,42 +475,6 @@
     top: -200px;
     width: 100%;
     height: calc(100% + 400px);
-    object-fit: cover;
-    object-position: center;
-  }
-
-  /* Variante della Roggia: +300px и ещё +400px вверх */
-  .story-caption[data-scene='roggia'] .story-caption__img {
-    inset: auto;
-    left: 0;
-    right: 0;
-    top: -1300px;
-    width: 100%;
-    height: calc(100% + 1400px);
-    object-fit: cover;
-    object-position: center;
-  }
-
-  /* Lesmo 1: +100px вверх */
-  .story-caption[data-scene='lesmo-1'] .story-caption__img {
-    inset: auto;
-    left: 0;
-    right: 0;
-    top: -300px;
-    width: 100%;
-    height: calc(100% + 200px);
-    object-fit: cover;
-    object-position: center;
-  }
-
-  /* Lesmo 2: +700px и ещё +500px вверх */
-  .story-caption[data-scene='lesmo-2'] .story-caption__img {
-    inset: auto;
-    left: 0;
-    right: 0;
-    top: -500px;
-    width: 100%;
-    height: calc(100% + 2400px);
     object-fit: cover;
     object-position: center;
   }
