@@ -341,6 +341,10 @@
   container-type: size;
 }
 
+.post-lap-gallery--podium {
+  pointer-events: auto;
+}
+
 /* Слот под кадр: на десктопе заполняет высоту галереи; на мобилке — 16:9 внутри */
 .post-lap-gallery__slot {
   position: relative;
@@ -368,6 +372,17 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.post-lap-gallery__podium-note {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.3rem 0.4rem 0.1rem;
+  font-size: clamp(0.65rem, 2.8vw, 0.78rem);
+  line-height: 1.35;
+  color: rgba(232, 234, 239, 0.5);
+  text-align: center;
+  letter-spacing: 0.02em;
 }
 
 .story-caption {
@@ -460,23 +475,6 @@
   .story-caption__img {
     object-fit: contain;
   }
-
-  /*
-   * Turn 11 (Parabolica): сдвиг кадра на 400px вправо внутри блока.
-   * Рамка шире на 400px и уходит влево на 400px → в окне видна правая часть слоя (сдвиг вправо).
-   */
-  .story-caption[data-scene='parabolica'] .story-caption__img {
-    inset: auto;
-    top: 0;
-    bottom: 0;
-    left: -400px;
-    right: auto;
-    width: calc(100% + 400px);
-    height: 100%;
-    max-width: none;
-    object-fit: contain;
-    object-position: center center;
-  }
 }
 
 @media (min-width: 641px) {
@@ -492,20 +490,8 @@
     object-position: center;
   }
 
-  /* Variante della Roggia: на 300px вверх */
+  /* Variante della Roggia: +300px и ещё +400px вверх */
   .story-caption[data-scene='roggia'] .story-caption__img {
-    inset: auto;
-    left: 0;
-    right: 0;
-    top: -300px;
-    width: 100%;
-    height: calc(100% + 600px);
-    object-fit: cover;
-    object-position: center;
-  }
-
-  /* Lesmo 2: на 700px вверх */
-  .story-caption[data-scene='lesmo-2'] .story-caption__img {
     inset: auto;
     left: 0;
     right: 0;
@@ -516,11 +502,36 @@
     object-position: center;
   }
 
-  /* Podium: картинка по натуральной высоте, прокрутка внутри слота */
-  .post-lap-gallery--podium {
-    pointer-events: auto;
+  /* Lesmo 1: +100px вверх */
+  .story-caption[data-scene='lesmo-1'] .story-caption__img {
+    inset: auto;
+    left: 0;
+    right: 0;
+    top: -100px;
+    width: 100%;
+    height: calc(100% + 200px);
+    object-fit: cover;
+    object-position: center;
   }
 
+  /* Lesmo 2: +700px и ещё +500px вверх */
+  .story-caption[data-scene='lesmo-2'] .story-caption__img {
+    inset: auto;
+    left: 0;
+    right: 0;
+    top: -1200px;
+    width: 100%;
+    height: calc(100% + 2400px);
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Больше высоты галереи — podium растёт вместе со скроллом, без скачка на весь экран */
+  .post-lap-gallery {
+    height: calc(var(--post-lap, 0) * min(74vh, 720px));
+  }
+
+  /* Podium: картинка по натуральной высоте, прокрутка внутри слота */
   .post-lap-gallery--podium .post-lap-gallery__slot {
     overflow-y: auto;
     overflow-x: hidden;
@@ -555,29 +566,6 @@
     object-position: center top;
   }
 
-  /* Полноэкранный podium (портал из StickyStage, postT в конце пост-финиша) */
-  .podium-fullscreen {
-    position: fixed;
-    inset: 0;
-    z-index: 600;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: max(0.75rem, env(safe-area-inset-top, 0px)) max(0.75rem, env(safe-area-inset-right, 0px))
-      max(0.75rem, env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px));
-    background: var(--bg);
-  }
-
-  .podium-fullscreen__img {
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    object-position: center;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
