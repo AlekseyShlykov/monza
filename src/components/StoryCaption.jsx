@@ -25,7 +25,7 @@ export const StoryCaption = memo(function StoryCaption({ scene, strength }) {
         </p>
         <h2 className="story-caption__title">{scene.title}</h2>
         <p className="story-caption__text">{scene.caption}</p>
-        <div className="story-caption__art" aria-hidden>
+        <div className="story-caption__media" aria-hidden>
           <img
             key={scene.id}
             src={assetUrl(scene.placeholder)}

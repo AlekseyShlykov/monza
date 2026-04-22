@@ -13,8 +13,6 @@
   --light-green: #2ee07a;
   --light-green-glow: rgba(60, 220, 130, 0.55);
   --radius: 14px;
-  /* Макс. ширина слота под фото; в разметке: width: min(100%, var(--story-photo-slot-cap)) */
-  --story-photo-slot-cap: 300px;
   --font: 'DM Sans', system-ui, -apple-system, sans-serif;
 }
 
