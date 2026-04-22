@@ -20,31 +20,33 @@ export const PostLapGallery = memo(
 
     return (
       <div className="post-lap-gallery" aria-label="После финиша">
-        <div
-          className="post-lap-gallery__slide"
-          aria-hidden={cooldownOpacity < 0.01}
-          style={{ opacity: cooldownOpacity }}
-        >
-          <img
-            src={assetUrl(cooldownSrc)}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="post-lap-gallery__img"
-          />
-        </div>
-        <div
-          className="post-lap-gallery__slide"
-          aria-hidden={podiumOpacity < 0.01}
-          style={{ opacity: podiumOpacity }}
-        >
-          <img
-            src={assetUrl(podiumSrc)}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="post-lap-gallery__img"
-          />
+        <div className="post-lap-gallery__slot">
+          <div
+            className="post-lap-gallery__slide"
+            aria-hidden={cooldownOpacity < 0.01}
+            style={{ opacity: cooldownOpacity }}
+          >
+            <img
+              src={assetUrl(cooldownSrc)}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="post-lap-gallery__img"
+            />
+          </div>
+          <div
+            className="post-lap-gallery__slide"
+            aria-hidden={podiumOpacity < 0.01}
+            style={{ opacity: podiumOpacity }}
+          >
+            <img
+              src={assetUrl(podiumSrc)}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="post-lap-gallery__img"
+            />
+          </div>
         </div>
       </div>
     );
