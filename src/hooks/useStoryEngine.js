@@ -1,6 +1,26 @@
 import { useEffect, useRef } from 'react';
-import { LAP_PROGRESS_END } from '../data/scenes.js';
+import { LAP_PROGRESS_END, SCROLL_HAPTIC_MILESTONES } from '../data/scenes.js';
 import { safeVibrate } from '../lib/vibrate.js';
+
+/** Мин. пауза между короткими вибро-отметками при скролле (мс). */
+const SCROLL_HAPTIC_MIN_GAP_MS = 100;
+
+function pickScrollHapticCrossing(prev, cur, milestones, lapEnd) {
+  if (prev === cur) return null;
+  const forward = cur > prev;
+  const crossed = [];
+  for (const m of milestones) {
+    if (m.p >= lapEnd - 0.002) continue;
+    if (forward) {
+      if (prev < m.p && cur >= m.p) crossed.push(m);
+    } else if (prev > m.p && cur <= m.p) {
+      crossed.push(m);
+    }
+  }
+  if (!crossed.length) return null;
+  crossed.sort((a, b) => (forward ? b.p - a.p : a.p - b.p));
+  return crossed[0];
+}
 
 const REDUCED =
   typeof window !== 'undefined' &&
@@ -40,7 +60,12 @@ export function useStoryEngine({ regionRef, onFrame, lapEnd = LAP_PROGRESS_END }
     podiumPulse: false,
   });
 
+  const prevProgressRef = useRef(0);
+  const lastScrollHapticAt = useRef(0);
+  const scrollHapticPrimedRef = useRef(false);
+
   useEffect(() => {
+    scrollHapticPrimedRef.current = false;
     const st = store.current;
     const layout = { top: 0, range: 1 };
     let raf = 0;
@@ -57,6 +82,28 @@ export function useStoryEngine({ regionRef, onFrame, lapEnd = LAP_PROGRESS_END }
       const target = documentProgressFromCache(layout);
       const lerp = REDUCED ? 1 : 0.12;
       st.smooth += (target - st.smooth) * lerp;
+
+      const prevForHaptic = scrollHapticPrimedRef.current
+        ? prevProgressRef.current
+        : st.smooth;
+      if (!scrollHapticPrimedRef.current) {
+        scrollHapticPrimedRef.current = true;
+      } else if (!REDUCED && st.smooth < lapEnd + 0.02) {
+        const milestone = pickScrollHapticCrossing(
+          prevForHaptic,
+          st.smooth,
+          SCROLL_HAPTIC_MILESTONES,
+          lapEnd,
+        );
+        if (milestone) {
+          const now = performance.now();
+          if (now - lastScrollHapticAt.current >= SCROLL_HAPTIC_MIN_GAP_MS) {
+            lastScrollHapticAt.current = now;
+            safeVibrate(milestone.pattern);
+          }
+        }
+      }
+      prevProgressRef.current = st.smooth;
 
       if (!st.finishPulse && st.smooth >= lapEnd - 0.0015) {
         st.finishPulse = true;

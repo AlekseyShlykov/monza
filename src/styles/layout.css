@@ -259,10 +259,11 @@
   container-type: size;
 }
 
-/* Вписанный в доступную область 16:9 — один размер для всех фото */
+/* 16:9 слот, ограничен по ширине — картинки целиком (contain) */
 .post-lap-gallery__slot {
   position: relative;
-  width: 100%;
+  align-self: center;
+  width: min(100%, var(--story-photo-slot-cap));
   max-width: 100%;
   max-height: 100%;
   aspect-ratio: 16 / 9;
@@ -274,7 +275,7 @@
 
 @supports (width: 1cqw) {
   .post-lap-gallery__slot {
-    width: min(100cqw, calc(100cqh * 16 / 9));
+    width: min(100cqw, calc(100cqh * 16 / 9), var(--story-photo-slot-cap));
     max-height: none;
     height: auto;
   }
@@ -293,7 +294,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -360,9 +361,10 @@
 
 .story-caption__art {
   flex: 0 0 auto;
-  width: 100%;
+  width: min(100%, var(--story-photo-slot-cap));
+  max-width: 100%;
+  margin: 0.35rem auto 0;
   aspect-ratio: 16 / 9;
-  margin-top: 0.35rem;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -376,7 +378,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
 }

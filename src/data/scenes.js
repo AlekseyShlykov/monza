@@ -15,7 +15,7 @@ export const scenes = [
     pFocus: 0.035,
     pFadeOut: 0.1,
     placeholder: 'assets/placeholders/start.png',
-    vibrate: null,
+    vibrate: [7],
   },
   {
     id: 'rettifilo',
@@ -26,7 +26,7 @@ export const scenes = [
     pFocus: 0.1,
     pFadeOut: 0.14,
     placeholder: 'assets/placeholders/turn1.png',
-    vibrate: null,
+    vibrate: [10],
   },
   {
     id: 'curva-grande',
@@ -37,7 +37,7 @@ export const scenes = [
     pFocus: 0.16,
     pFadeOut: 0.2,
     placeholder: 'assets/placeholders/turn2.png',
-    vibrate: null,
+    vibrate: [9],
   },
   {
     id: 'roggia',
@@ -48,7 +48,7 @@ export const scenes = [
     pFocus: 0.22,
     pFadeOut: 0.27,
     placeholder: 'assets/placeholders/turn34.png',
-    vibrate: null,
+    vibrate: [11],
   },
   {
     id: 'lesmo-1',
@@ -59,7 +59,7 @@ export const scenes = [
     pFocus: 0.29,
     pFadeOut: 0.33,
     placeholder: 'assets/placeholders/turn5.png',
-    vibrate: null,
+    vibrate: [10],
   },
   {
     id: 'lesmo-2',
@@ -70,7 +70,7 @@ export const scenes = [
     pFocus: 0.35,
     pFadeOut: 0.39,
     placeholder: 'assets/placeholders/turn6.png',
-    vibrate: null,
+    vibrate: [9],
   },
   {
     id: 'ascari',
@@ -81,7 +81,7 @@ export const scenes = [
     pFocus: 0.5,
     pFadeOut: 0.56,
     placeholder: 'assets/placeholders/turn810.png',
-    vibrate: null,
+    vibrate: [13],
   },
   {
     id: 'parabolica',
@@ -92,7 +92,7 @@ export const scenes = [
     pFocus: 0.61,
     pFadeOut: 0.67,
     placeholder: 'assets/placeholders/turn11.png',
-    vibrate: null,
+    vibrate: [11],
   },
   {
     id: 'finish',
@@ -103,9 +103,20 @@ export const scenes = [
     pFocus: LAP_PROGRESS_END,
     pFadeOut: 0.76,
     placeholder: 'assets/placeholders/finish.png',
-    vibrate: 'finish',
+    vibrate: null,
   },
 ];
+
+/** Короткие импульсы при пересечении фокуса сцены при скролле (финиш — отдельно в движке). */
+export const SCROLL_HAPTIC_MILESTONES = scenes
+  .filter((s) => s.id !== 'finish')
+  .map((s) => ({ p: s.pFocus, pattern: s.vibrate ?? [10] }));
+
+/**
+ * Доля post-lap скролла (postT 0→1): ниже порога — кадр cooldown, выше — podium.
+ * Больше значение = дольше виден cooldown.
+ */
+export const POST_LAP_COOLDOWN_MAX = 0.8;
 
 /** Post-finish scroll: first cooldown, then podium (one at a time). Paths under /public. */
 export const postLapPhotos = [

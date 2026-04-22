@@ -1,18 +1,18 @@
 import { memo, useMemo } from 'react';
-import { postLapPhotos } from '../data/scenes.js';
+import { POST_LAP_COOLDOWN_MAX, postLapPhotos } from '../data/scenes.js';
 
 function assetUrl(path) {
   const p = path.startsWith('/') ? path.slice(1) : path;
   return `${import.meta.env.BASE_URL}${p}`;
 }
 
-/** First half of post-lap scroll = cooldown, second half = podium. */
+/** Большую часть post-lap скролла — cooldown, затем podium (см. POST_LAP_COOLDOWN_MAX). */
 export const PostLapGallery = memo(
   function PostLapGallery({ postT }) {
     const [cooldownSrc, podiumSrc] = postLapPhotos;
     const { cooldownOpacity, podiumOpacity } = useMemo(() => {
       const t = Math.min(1, Math.max(0, postT));
-      if (t < 0.5) {
+      if (t < POST_LAP_COOLDOWN_MAX) {
         return { cooldownOpacity: 1, podiumOpacity: 0 };
       }
       return { cooldownOpacity: 0, podiumOpacity: 1 };
@@ -51,5 +51,6 @@ export const PostLapGallery = memo(
       </div>
     );
   },
-  (prev, next) => (prev.postT < 0.5) === (next.postT < 0.5),
+  (prev, next) =>
+    (prev.postT < POST_LAP_COOLDOWN_MAX) === (next.postT < POST_LAP_COOLDOWN_MAX),
 );
