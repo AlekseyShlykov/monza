@@ -448,6 +448,10 @@
   position: relative;
 }
 
+.story-caption__media > picture {
+  display: contents;
+}
+
 .story-caption__img {
   position: absolute;
   inset: 0;

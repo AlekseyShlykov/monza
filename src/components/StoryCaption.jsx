@@ -26,14 +26,30 @@ export const StoryCaption = memo(function StoryCaption({ scene, strength }) {
         <h2 className="story-caption__title">{scene.title}</h2>
         <p className="story-caption__text">{scene.caption}</p>
         <div className="story-caption__media" aria-hidden>
-          <img
-            key={scene.id}
-            src={assetUrl(scene.placeholder)}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="story-caption__img"
-          />
+          {scene.placeholderDesktop ? (
+            <picture key={scene.id}>
+              <source
+                media="(min-width: 641px)"
+                srcSet={assetUrl(scene.placeholderDesktop)}
+              />
+              <img
+                src={assetUrl(scene.placeholder)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="story-caption__img"
+              />
+            </picture>
+          ) : (
+            <img
+              key={scene.id}
+              src={assetUrl(scene.placeholder)}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="story-caption__img"
+            />
+          )}
         </div>
       </div>
     </div>

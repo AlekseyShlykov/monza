@@ -70,6 +70,7 @@ export const scenes = [
     pFocus: 0.35,
     pFadeOut: 0.39,
     placeholder: 'assets/placeholders/turn6.png',
+    placeholderDesktop: 'assets/placeholders/turn6d.png',
     vibrate: [9],
   },
   {
